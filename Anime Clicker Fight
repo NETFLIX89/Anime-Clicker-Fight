@@ -1,0 +1,156 @@
+getgenv().autoTap = false
+getgenv().autoRebirth = false
+getgenv().autoEgg = false
+getgenv().walkSpeed = false
+
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+
+
+local Window = Rayfield:CreateWindow({
+	Name = "Anime Clicker Fight by NETFLIX",
+	LoadingTitle = "Anime Clicker fight",
+	LoadingSubtitle = "Anime Clicker Fight by NETFLIX",
+	ConfigurationSaving = {
+		Enabled = true,
+		FolderName = Farming, -- Create a custom folder for your hub/game
+		FileName = ""
+	},
+        Discord = {
+        	Enabled = false,
+        	Invite = "", -- The Discord invite code, do not include discord.gg/
+        	RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+        },
+	
+})
+local Tab = Window:CreateTab("Farming", 4483362458)
+
+
+
+
+
+local Section = Tab:CreateSection("Tapping")
+local Toggle = Tab:CreateToggle({
+
+
+
+	Name = "Auto Click",
+	CurrentValue = false,
+	Flag = "Auto Click", 
+	Callback = function(Value)
+		getgenv().autoTap = Value
+        if Value then
+        doTap()
+	end
+end
+})
+
+function doTap()
+    spawn(function()
+        while getgenv().autoTap == true do
+            game:GetService("ReplicatedStorage").System.SystemClick.Click:FireServer()
+            wait()
+        end 
+    end)
+end
+
+
+local Section = Tab:CreateSection("Run")
+local Slider = Tab:CreateSlider({
+    Name = "Change WalkSpeed",
+    Range = {50, 500},
+    Increment = 10,
+    Suffix = "Speed",
+    CurrentValue = 10,
+    Flag = "Slider1", 
+    Callback = function(Value)
+        getgenv().walkSpeed = Value
+    end,
+})
+
+
+local Toggle = Tab:CreateToggle({
+    Name = "Toggle WalkSpeed",
+    CurrentValue = false,
+    Flag = "Toggle1", 
+    Callback = function(Value)
+        getgenv().ChangeWalkSpeed = Value
+    end,
+})
+
+task.spawn(function()
+    while wait() do 
+        if getgenv().walkSpeed ~= nil and getgenv().ChangeWalkSpeed then
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = getgenv().walkSpeed
+        end
+    end
+end)
+    
+
+
+local Tab = Window:CreateTab("Eggs", 4483362458)
+local Dropdown = Tab:CreateDropdown({
+    Name = "Select Egg to Open",
+    Options = {1,2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,},
+    CurrentOption = " ", 
+    Flag = "eggsdrop", 
+    Callback = function(Option)
+        getgenv().eggtoopen = Option; -- we define it so we can use it later on anywhere as options
+    end,
+})
+
+local Toggle = Tab:CreateToggle({
+    Name = "Auto Open Selected Egg",
+    CurrentValue = false,
+    Flag = "autoegg", 
+    Callback = function(Value)
+        getgenv().autoegg = Value; --we define it so we can use it later on anywhere
+    end,
+})
+
+task.spawn(function() -- spawns a function 
+    while wait() do -- self explenatory its waiting for the toggle
+        if getgenv().autoegg then -- this is saying that if the toggle is on it will do the stuff below
+            -- below this is the remote 
+            local args = {
+                [1] = eggtoopen,
+                [2] = 3
+            }
+            
+            game:GetService("ReplicatedStorage").Tool.DrawUp.Msg.DrawHero:InvokeServer(unpack(args))
+            wait()
+        end
+    end
+end)
+
+
+
+
+
+
+
+function autoRebirth(i)
+    spawn(function()
+        while getgenv().autoRebirth == true do
+
+			local args = {
+				[1] = i
+			}
+			
+			game:GetService("ReplicatedStorage").Events.Rebirth:FireServer(unpack(args))
+
+            wait()
+        end
+    end)
+end
+
+
+
+
+doTap()
+autoRebirth()
+
+
+
+
+
+
